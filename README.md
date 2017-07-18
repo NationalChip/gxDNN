@@ -3,6 +3,6 @@ Run Neural networks on NationalChip NPU processor.
 
 ## Examples ##
 
-[MNIST](examples/mnist.md "MNIST")
+[MNIST](examples/mnist "MNIST")
 
 

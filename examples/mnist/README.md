@@ -1,6 +1,6 @@
 # MNIST
 
-下面以TensorFlow自带的[mnist](https://github.com/tensorflow/tensorflow/blob/v1.0.0/tensorflow/examples/tutorials/mnist/mnist_softmax.py "mnist")模型为例，说明gxDNN的使用。
+下面以TensorFlow自带的[mnist](https://github.com/tensorflow/tensorflow/blob/v1.0.0/tensorflow/examples/tutorials/mnist/mnist_softmax.py "mnist")模型（TensorFlow v1.0）为例，说明gxDNN的使用。
 
 ## 生成NPU文件 ##
 
@@ -11,30 +11,35 @@ MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x
 
 ### 生成ckpt和pb文件 ###
 
-为了方便的获取到输入结点和输出结点，我们给输入结点和输出结点取个名字：
+为了方便的获取到输入结点和输出结点，我们给输入结点和输出结点取个名字，把`x`取名为`input_x`，把`y`取名为`result`：
 把`mnist_softmax.py`第40行
-> x = tf.placeholder(tf.float32, [None, 784])
+
+	x = tf.placeholder(tf.float32, [None, 784])
 
 修改为
-> x = tf.placeholder(tf.float32, [None, 784], name="input_x")
+
+	x = tf.placeholder(tf.float32, [None, 784], name="input_x")
 
 把第43行
-> y = tf.matmul(x, W) + b
+
+	y = tf.matmul(x, W) + b
 
 修改为
-> y = tf.add(tf.matmul(x, W), b, name="result")
 
-为了生成pb和ckpt文件，在文件末尾添加：
+	y = tf.add(tf.matmul(x, W), b, name="result")
+
+为了生成ckpt和pb文件，在`main`函数末尾添加：
 
     saver = tf.train.Saver() 
     saver.save(sess, "mnist.ckpt") 
     tf.train.write_graph(sess.graph_def, "./", "mnist.pb")
 
-运行程序后，当前路径下会生成`mnist.ckpt`和`mnist.pb`文件。
+修改后的文件见[这里](./mnist.py)。
+运行程序后，当前路径下会生成`mnist.ckpt.*`和`mnist.pb`文件。
 
 ### 把ckpt和pb文件合并成一个pb文件 ###
 
-使用[freeze_graph.py](https://github.com/tensorflow/tensorflow/blob/v1.0.0/tensorflow/python/tools/freeze_graph.py "freeze_graph.py")脚本将`mnist.ckpt`和`mnist.pb`合并为一个pb文件。
+使用[freeze_graph.py](https://github.com/tensorflow/tensorflow/blob/v1.0.0/tensorflow/python/tools/freeze_graph.py "freeze_graph.py")脚本将`mnist.ckpt.*`和`mnist.pb`合并为一个pb文件。
 注意：不同TensorFlow版本的`freeze_graph.py`脚本可能不同。
 
 执行命令
@@ -46,7 +51,7 @@ MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x
 
 ### 编辑NPU配置文件 ###
 
-编辑配置文件`mnist_config.yaml`文件，含义见注释。
+编辑配置文件[mnist_config.yaml](./mnist_config.yaml)文件，含义见注释。
 
     PB_FILE: mnist_with_ckpt.pb # 输入的pb文件
     OUTPUT_FILE: mnist.npu # 输出的NPU文件名
