@@ -5,7 +5,7 @@
 ## 生成NPU文件 ##
 
 MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x28的手写数字图片，输出是图片对应的0-9数字的概率。
-这个MNIST计算模型非常简单，可以用一个公式来表示： `y = x * W + b`
+这个MNIST计算模型非常简单，可以用一个公式来表示： `y = x * W + b` （训练的过程中还会去计算softmax，但由于我们正式使用时只需要获取结果中最大值的索引，而softmax是个单调递增函数，因此省去这个函数不会对结果有影响）
 其中`x`为输入数据，`y`为输出数据，`W`和`b`为训练的参数。训练的过程就是不断通过计算出来的`y`和期望的`y_`去调整`W`和`b`的过程。
 在NPU上，我们只需要用到训练好的`W`和`b`，而不需要训练的过程。
 
@@ -34,7 +34,7 @@ MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x
     saver.save(sess, "mnist.ckpt") 
     tf.train.write_graph(sess.graph_def, "./", "mnist.pb")
 
-修改后的文件见[这里](./mnist.py)。
+修改后的文件见[这里](./compilation/mnist.py)。
 运行程序后，当前路径下会生成`mnist.ckpt.*`和`mnist.pb`文件。
 
 ### 把ckpt和pb文件合并成一个pb文件 ###
@@ -51,7 +51,7 @@ MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x
 
 ### 编辑NPU配置文件 ###
 
-编辑配置文件[mnist_config.yaml](./mnist_config.yaml)文件，含义见注释。
+编辑配置文件[mnist_config.yaml](./compilation/mnist_config.yaml)文件，含义见注释。
 
     PB_FILE: mnist_with_ckpt.pb # 输入的pb文件
     OUTPUT_FILE: mnist.npu # 输出的NPU文件名
@@ -74,4 +74,38 @@ MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x
 
 ## 执行NPU文件 ##
 
+NPU文件生成后，需要调用国芯提供的SDK，把模型部署到GX8010开发板上运行。
+
+### 调用SDK流程 ###
+
+1. 打开NPU设备。
+2. 传入模型文件，得到模型task.
+3. 获取task的输入输出信息。
+4. 拷贝输入数据到模型内存中。
+5. 运行模型。
+6. 释放模型task.
+7. 关闭NPU设备。
+
+### mnist示例 ###
+
+代码请参考[这里](./execution/test_mnist.c)。程序要求用户输入一个保存有28x28个像素值的二进制文件，输出识别的数字。
+
+[images](./execution/images)中存放的是若干个二进制测试文件。其内容为28x28的已做归一化的像素值。
+
+执行`make`生成可执行文件`test_mnist.elf`。
+
+把`mnist.npu`、`test_mnist.elf`和`images`目录放到GX8010开发板上，并运行，打印如下：
+
+    ./test_mnist.elf images/image0
+    Digit: 7
+    ./test_mnist.elf images/image1
+    Digit: 2
+    ./test_mnist.elf images/image2
+    Digit: 1
+    ./test_mnist.elf images/image3
+    Digit: 0
+    ./test_mnist.elf images/image4
+    Digit: 4
+    ./test_mnist.elf images/image5
+    Digit: 1
 
