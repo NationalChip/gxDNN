@@ -66,8 +66,14 @@ MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x
 
 ### 编译 ###
 
-使用gxDNN工具链编译
-> gxnpuc --config=./mnist_config.yaml
+使用gxnpuc工具编译
+```
+gxnpuc mnist_config.yaml
+```
+如果 gxnpuc 的版本在1.0之前
+```
+gxnpuc --config=./mnist_config.yaml
+```
 
 生成NPU文件`mnist.npu`
 
