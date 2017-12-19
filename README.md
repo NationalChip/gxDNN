@@ -26,7 +26,6 @@ Run Neural networks on NationalChip NPU processor.
 
 	usage: gxnpuc [-h] [-V] [-L] [config_filename]
 	
-	optional arguments:
 	  -h, --help       show this help message and exit
 	  -V, --version    show program's version number and exit
 	  -L, --list       list supported ops
@@ -54,7 +53,7 @@ Run Neural networks on NationalChip NPU processor.
 
 为了让模型更高效地运行在 NPU 处理器上，需要对模型做一些优化。
 
-- 做卷积和降采样的数据格式需要用 NCHW 格式，优化过程可以参考[这里](examples/optimization/nchw_2_nhwc.py)。
+- 做卷积和降采样的数据格式需要用 NCHW 格式，优化过程可以参考[这里](examples/optimization/nhwc_2_nchw.py)。
 - Placeholder 的维度信息需要确定。
 - 各 OP 的 shape 需要确定，即和 shape 有关的 OP value 需要确定。
 

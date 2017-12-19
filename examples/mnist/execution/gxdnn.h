@@ -36,11 +36,8 @@ typedef enum {
  * @return  GxDnnResult GXDNN_RESULT_SUCCESS    succeed without error
  *                      GXDNN_RESULT_WRONG_PARAMETER    wrong parameter
  *                      GXDNN_RESULT_DEVICE_ERROR       device error
- * @remark  if devicePath is "/dev/cpu16", open 16x16 simulator
- *             devicePath is "/dev/cpu32", open 32x32 simulator
- *             devicePath is "/dev/cpu64", open 64x64 simulator
- *             devicePath is "/dev/npu[0-9]", open real npu device
- *             devicePath is "/dev/snpu[0-9]", open real snpu device (only in scpu)
+ * @remark  if devicePath is "/dev/gxnpu", open npu device
+ *             devicePath is "/dev/gxsnpu", open snpu device
  */
 GxDnnResult GxDnnOpenDevice(const char *devicePath,
                             GxDnnDevice *device);
