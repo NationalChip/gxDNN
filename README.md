@@ -30,6 +30,22 @@ Run Neural networks on NationalChip NPU processor.
 	  -V, --version    show program's version number and exit
 	  -L, --list       list supported ops
 
+#### 配置文件说明 ####
+
+| 配置项              | 选项                | 说明                                                    |
+| ------------------- | ------------------- | ------------------------------------------------------- |
+| PB_FILE             |                     | 包含 CKPT 的 PB 文件                                    |
+| OUTPUT_FILE         |                     | 编译后生成的文件名                                      |
+| NPU_UNIT            | NPU32 / NPU64       | NPU 型号对应的 MAC 数（SNPU 选 NPU32，主 NPU 选 NPU64） |
+| COMPRESS            | true / false        | 是否启动压缩模式                                        |
+| COMPRESS_QUANT_BITS | 4/5/6/7/8           | 量化压缩的 bit 数                                       |
+| COMPRESS_TYPE       | LINEAR / GAUSSIAN   | 线性压缩还是高斯压缩                                    |
+| FLOAT16             | true / false        | 是否启动 FLOAT16 量化模式 （默认 false）                |
+| OUTPUT_TYPE         | raw / c_code        | Linux 环境下运行的模型请选择 raw                        |
+| DEBUG_INFO_ENABLE   | true / false        | 编译的输出文件中是否带调试信息（默认 false）            |
+| INPUT_OPS           | op_name: [shape]    | 设置输入的 OP 名和 shape                                |
+| OUTPUT_OPS          | [out_op_names, ...] | 设置输出的 OP 名列表                                    |
+
 ### gxnpudebug ###
 
 如果编译时配置文件中的 DEBUG_INFO_ENABLE 选项设置为 true，编译出的 npu 文件带上了调试信息，此时可以使用调试工具 gxnpudebug 工具来处理该文件。
