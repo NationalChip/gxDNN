@@ -42,7 +42,7 @@ typedef enum {
 GxDnnResult GxDnnOpenDevice(const char *devicePath,
                             GxDnnDevice *device);
 
-//-------------------------------------------------------------------------------------------------
+/*===============================================================================================*/
 
 /**
  * @brief   Close NPU device
@@ -73,6 +73,8 @@ GxDnnResult GxDnnCreateTaskFromFile(GxDnnDevice device,
                                     const char *taskPath,
                                     GxDnnTask *task);
 
+/*===============================================================================================*/
+
 /**
  * @brief   Load NPU task from memory
  * @param   [in]    device          the device handle
@@ -90,6 +92,8 @@ GxDnnResult GxDnnCreateTaskFromBuffer(GxDnnDevice device,
                                       const unsigned char *taskBuffer,
                                       const int bufferSize,
                                       GxDnnTask *task);
+
+/*===============================================================================================*/
 
 /**
  * @brief   Release NPU task
@@ -127,6 +131,8 @@ GxDnnResult GxDnnGetTaskIONum(GxDnnTask task,
                               int *inputNum,
                               int *outputNum);
 
+/*===============================================================================================*/
+
 /**
  * @brief   Get the IO Info of the loaded task
  * @param [in]      task            the loaded task
@@ -162,6 +168,8 @@ typedef enum {
  */
 typedef int (*GxDnnEventHandler)(GxDnnTask task, GxDnnEvent event, void *userData);
 
+/*===============================================================================================*/
+
 /**
  * @brief   Run task
  * @param   [in]    task            the loaded task
@@ -178,6 +186,8 @@ GxDnnResult GxDnnRunTask(GxDnnTask task,
                          GxDnnEventHandler eventHandler,
                          void *userData);
 
+/*===============================================================================================*/
+
 /**
  * @brief   Stop task
  * @param   [in]    task            the loaded task
@@ -187,23 +197,23 @@ GxDnnResult GxDnnRunTask(GxDnnTask task,
  */
 GxDnnResult GxDnnStopTask(GxDnnTask task);
 
-/**
- * @brief   Translate float32 to flaot16
- * @param   [in]   float32 data
- *          [out]  float16 data
- * @return  GxDnnResult GXDNN_RESULT_SUCCESS    succeed without error
- *                      GXDNN_RESULT_WRONG_PARAMETER    wrong parameter
- */
-GxDnnResult GxDnnFloat32To16(unsigned short *dst, float *src, int num);
+/*===============================================================================================*/
+
+typedef struct NpuDevUtilInfo {
+    float ratio;
+} GxDnnDevUtilInfo;
 
 /**
- * @brief   Translate float16 to flaot32
- * @param   [in]   float16 data
- *          [out]  float32 data
+ * @brief   Get device utilization information
+ * @param   [in]   GxDnnDevice device
+ *          [out]  GxDnnDevUtilInfo info
  * @return  GxDnnResult GXDNN_RESULT_SUCCESS    succeed without error
  *                      GXDNN_RESULT_WRONG_PARAMETER    wrong parameter
+ *                      GXDNN_RESULT_DEVICE_ERROR    device error
  */
-GxDnnResult GxDnnFloat16To32(float *dst, unsigned short *src, int num);
+GxDnnResult GxDnnGetDeviceUtil(GxDnnDevice device, GxDnnDevUtilInfo *info);
+
+/*===============================================================================================*/
 
 #ifdef __cplusplus
 } /* extern C */
