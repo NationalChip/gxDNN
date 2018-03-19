@@ -53,6 +53,7 @@ MNIST是一个入门级的计算机视觉数据集，它的输入是像素为28x
 
 编辑配置文件[mnist_config.yaml](./compilation/mnist_config.yaml)文件，含义见注释。
 
+    CORENAME: LEO # 芯片型号
     PB_FILE: mnist_with_ckpt.pb # 输入的pb文件
     OUTPUT_FILE: mnist.npu # 输出的NPU文件名
     SECURE: false # 不开启内容保护

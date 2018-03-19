@@ -40,7 +40,7 @@ int main(int argc, const char *argv[])
 	fclose(image_fp);
 
 	// 打开NPU设备
-	GxDnnOpenDevice("/dev/gxsnpu", &device);
+	GxDnnOpenDevice("/dev/gxnpu", &device);
 
 	// 传入模型文件，得到模型task
 	ret = GxDnnCreateTaskFromFile(device, model_name, &task);
