@@ -2,6 +2,8 @@
 
 Run Neural networks on NationalChip NPU processor.
 
+注意：此仓库不再更新，最新文档请访问 https://ai.nationalchip.com/ 
+
 ## 安装 ##
 
 ### 安装gxDNN工具链 ###
