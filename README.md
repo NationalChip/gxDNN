@@ -2,77 +2,81 @@
 
 Run Neural networks on NationalChip NPU processor.
 
-注意：此仓库不再更新，最新文档请访问 https://ai.nationalchip.com/ 
+## Install ##
 
-## 安装 ##
-
-### 安装gxDNN工具链 ###
+### Install gxDNN Compiler ###
 
 > pip install npu_compiler
 
-### 更新gxDNN工具链 ###
+### Upgrade gxDNN Compiler ###
 
 > pip install --upgrade npu_compiler
 
-### 查看工具链版本 ###
-
-安装或更新完成后，可以使用如下命令查看当前工具链的版本号。
+### View Compiler Version ###
 
 > gxnpuc --version
 
-## 工具链使用 ##
+## Compiler Usage ##
 
 ### gxnpuc ###
 
-用于把模型文件编译成能在 NPU 上运行的 npu 文件。
+Compile TF model file into NPU file that can run on NPU.
 
-	usage: gxnpuc [-h] [-V] [-L] [config_filename]
+	usage: gxnpuc [-h] [-V] [-L] [-v] [-m] [-c CMD [CMD ...]] [-w]
+	              [config_filename]
 	
-	  -h, --help       show this help message and exit
-	  -V, --version    show program's version number and exit
-	  -L, --list       list supported ops
-
-#### 配置文件说明 ####
-
-| 配置项              | 选项                 | 说明                                                    |
-| ------------------- | -------------------  | ------------------------------------------------------- |
-| CORENAME            | LEO / LEO_MPW        | 芯片型号                                                |
-| PB_FILE             |                      | 包含 CKPT 的 PB 文件                                    |
-| OUTPUT_FILE         |                      | 编译后生成的文件名                                      |
-| NPU_UNIT            | NPU32 / NPU64        | NPU 型号对应的 MAC 数（SNPU 选 NPU32，主 NPU 选 NPU64） |
-| COMPRESS            | true / false         | 是否启动压缩模式                                        |
-| COMPRESS_QUANT_BITS | 4/5/6/7/8            | 量化压缩的 bit 数                                       |
-| COMPRESS_TYPE       | LINEAR / GAUSSIAN    | 线性压缩还是高斯压缩                                    |
-| OUTPUT_TYPE         | raw / c_code         | Linux 环境下运行的模型请选择 raw                        |
-| DEBUG_INFO_ENABLE   | true / false         | 编译的输出文件中是否带调试信息（默认 false）            |
-| INPUT_OPS           | op_name: [shape] ... | 设置输入的 OP 名和 shape                                |
-| OUTPUT_OPS          | [out_op_names, ...]  | 设置输出的 OP 名列表                                    |
-| INPUT_DATA          | op_name: [data] ...  | 有些 Placeholder 的数据在部署时是确定的，需要写明       |
-
-### gxnpudebug ###
-
-如果编译时配置文件中的 DEBUG_INFO_ENABLE 选项设置为 true，编译出的 npu 文件带上了调试信息，此时可以使用调试工具 gxnpudebug 工具来处理该文件。
-
-	usage: gxnpudebug [-h] [-S] [-P] file [file ...]
+	NPU Compiler
+	
+	positional arguments:
+	  config_filename       config file
 	
 	optional arguments:
-	  -h, --help        show this help message and exit
-	  -P, --print_info  print debug info
-	  -S, --strip       strip debug info
+	  -h, --help            show this help message and exit
+	  -V, --version         show program's version number and exit
+	  -L, --list            list supported ops
+	  -v, --verbose         verbosely list the processed ops
+	  -m, --meminfo         verbosely list memory info of ops
+	  -c CMD [CMD ...], --cmd CMD [CMD ...]
+	                        use command line configuration
+	  -w, --weights         print compressed weights(GRUS only)
 
-### gxnpu_rebuild_ckpt ###
+#### Config File Description ####
 
-对权重数据做量化或做float16，并重新生成 ckpt 文件，用于评估模型压缩后对结果的影响。
+| ITEM                | Configuration        | Description                                             |
+| ------------------- | -------------------  | ------------------------------------------------------- |
+| CORENAME            | GRUS                 | Chip name.                                              |
+| PB_FILE             |                      | TensorFlow Frozen PB.                                   |
+| OUTPUT_FILE         |                      | Output file name.                                       |
+| NPU_UNIT            | NPU32                | NPU MAC num. (Must be NPU32 on GRUS)                    |
+| COMPRESS            | true / false         | FC weights compress or not.                             |
+| CONV2D_COMPRESS     | true / false         | Conv2D weights compress or not.                         |
+| OUTPUT_TYPE         | c_code               | Output type. (Must be c_code on GRUS)                   |
+| INPUT_OPS           | op_name: [shape] ... | Input OP name and shape.                                |
+| OUTPUT_OPS          | [out_op_names, ...]  | Output OP name.                                         |
+| FP16_OUT_OPS        | [out_op_names, ...]  | Output OP name with fp16 format. (Others use fp32)      |
+| FUSE_BN             | true / false         | Fuse batch nomailization or not.                        |
 
-## 举例 ##
+## Examples ##
 
 [MNIST](examples/mnist "MNIST")
 
-## 优化 ##
+## FAQ ##
 
-为了让模型更高效地运行在 NPU 处理器上，需要对模型做一些优化。
-
-- 做卷积和降采样的数据格式需要用 NCHW 格式，优化过程可以参考[这里](examples/optimization/nhwc_2_nchw.py)。
-- Placeholder 的维度信息需要确定。
-- 各 OP 的 shape 需要确定，即和 shape 有关的 OP value 需要确定。
+	Q: What is the Python version supported by the NPU Compiler?
+	A: Python 2.7 and Python 3.6 are supported.
+	
+	Q: What is the TensorFlow version supported by the NPU Compiler?
+	A: All versions above TensorFlow 1.10 are supported.
+	
+	Q: How do I view the list of OP supported by NPU Compiler?
+	A: Use the command `gxnpuc --list`. See GRUS_OPS content for GX8002 chip.
+	
+	Q: How do I view the version of the NPU Compiler?
+	A: Use the command `gxnpuc --version`.
+	
+	Q: "Some OP types are not supported when compiling the model!" What if this error is encountered while compiling the model?
+	A: Consult the engineers of NationalChip to see if they can add the printed unsupported OP.
+	
+	Q: Is dynamic RNN model supported?
+	A: Not supported. The model structure needs to be modified and implemented with a for loop.
 
