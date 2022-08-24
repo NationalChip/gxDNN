@@ -1,0 +1,12 @@
+CORENAME: LEO # 芯片型号 LEO/LEO_MPW
+PB_FILE: mnist_with_ckpt.pb # 输入的pb文件
+OUTPUT_FILE: mnist.npu # 输出的NPU文件名
+NPU_UNIT: NPU64 # NPU设备类型
+COMPRESS: false # 压缩模型
+COMPRESS_QUANT_BITS: 8 # 量化成8bits
+COMPRESS_TYPE: LINEAR # 线性压缩
+OUTPUT_TYPE: raw # NPU文件的类型
+INPUT_OPS:
+        input_x: [1, 784] # 输入结点名称和数据维度，每运行一次输入数据为1x784，即一幅图
+OUTPUT_OPS: [result] # 输出结点名称
+
