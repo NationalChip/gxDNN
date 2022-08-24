@@ -1,6 +1,6 @@
 TARGET = test_mnist.elf
 
-CFLAGS = -I../../../include -L../../../lib
+CFLAGS = -I../../include -L../../lib
 
 CC = gcc
 CFLAGS += -ldriver -lcmodel -lm -lpthread -lstdc++
