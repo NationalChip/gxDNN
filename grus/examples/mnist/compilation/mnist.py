@@ -45,7 +45,7 @@ print(accuracy.eval({x: mnist.test.images, y_: mnist.test.labels}))
 
 from tensorflow.python.framework import graph_util
 constant_graph = graph_util.convert_variables_to_constants(sess, sess.graph_def, ["result"])
-with tf.gfile.FastGFile('./mnist_with_ckpt.pb', mode='wb') as f:
+with tf.gfile.FastGFile('./generated_pb/mnist_with_ckpt.pb', mode='wb') as f:
     f.write(constant_graph.SerializeToString())
 
 #print(y.eval({x: mnist.test.images, y_: mnist.test.labels}))

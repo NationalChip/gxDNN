@@ -27,27 +27,28 @@ To generate a PB file, add the following at the end of the file:
 
 	from tensorflow.python.framework import graph_util
 	constant_graph = graph_util.convert_variables_to_constants(sess, sess.graph_def, ["result"])
-	with tf.gfile.FastGFile('./mnist_with_ckpt.pb', mode='wb') as f:
+	with tf.gfile.FastGFile('./generated_pb/mnist_with_ckpt.pb', mode='wb') as f:
 	    f.write(constant_graph.SerializeToString())
 
 
 For the modified document, see [here](./compilation/mnist.py)。
-After running `python mnist.py`, `mnist_with_ckpt.pb` will be generated under the current path.
+After running `python mnist.py`, `mnist_with_ckpt.pb` will be generated under 'generated_pb' file.
 
 ### Edit the NPU Config File ###
 
 Edit the config file [config.yaml](./compilation/config.yaml):
 
-	CORENAME: GRUS # chip core name
-	PB_FILE: mnist_with_ckpt.pb # input pb file name
-	OUTPUT_FILE: model.h # output NPU file name
-	NPU_UNIT: NPU32 # NPU MAC type
-	COMPRESS: true # compress FC weight
-	CONV2D_COMPRESS: true # compress Conv2D weight
-	OUTPUT_TYPE: c_code # output NPU file format
-	INPUT_OPS:
-	        input_x: [1, 784] # input node name and shape
-	OUTPUT_OPS: [result] # output node name
+    CORENAME: LEO                               # 芯片型号 LEO/LEO_MPW
+    PB_FILE: ./generated_pb/mnist_with_ckpt.pb  # 输入的pb文件
+    OUTPUT_FILE: mnist.npu                      # 输出的NPU文件名
+    NPU_UNIT: NPU64                             # NPU设备类型
+    COMPRESS: false                             # 压缩模型
+    COMPRESS_QUANT_BITS: 8                      # 量化成8bits
+    COMPRESS_TYPE: LINEAR                       # 线性压缩
+    OUTPUT_TYPE: raw                            # NPU文件的类型
+    INPUT_OPS:
+            input_x: [1, 784]                   # 输入结点名称和数据维度，每运行一次输入数据为1x784，即一幅图
+    OUTPUT_OPS: [result]                        # 输出结点名称 
 
 ### Compile ###
 
@@ -56,12 +57,12 @@ Compile using `gxnpuc`
 gxnpuc config.yaml
 ```
 
-Generate `model.h`.
+Generate `mnist.npu`.
 
 
 ## Run Model ##
 
-After the NPU file is generated, we need to call the API provided by NationalChip to deploy the model to the gx8002 development board.
+After the NPU file is generated, we need to call the API provided by NationalChip to deploy the model to the gx8010 development board.
 
 ### Call API Process ###
 
