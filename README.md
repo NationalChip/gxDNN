@@ -8,7 +8,7 @@ Run Neural networks on NationalChip NPU processor.
 
 NPU is specially designed for artificial intelligence of Internet of things to accelerate the operation of neural network, and solve the problem of low efficiency of traditional chip in neural network operation.
 
-GX80xx series chips(Version LEO:GX8010, GX8009, GX8009B, GX8008; Version GRUS:GX8002) includes NPU processor with high performance and low power consumption. The NPU processor contains sub modules such as matrix multiplication, convolution, general calculation, data copy and decompression.
+LEO(GX8010, GX8009, GX8008) and GRUS(GX8002) include NPU processor with high performance and low power consumption. The NPU processor contains sub modules such as matrix multiplication, convolution, general calculation, data copy and decompression.
 
 ### NPU Toolchain and API ###
 
