@@ -95,9 +95,9 @@ Compile TF model file into NPU file that can run on NPU.
 | INPUT_DATA          | op_name: [data] ...  | When input data is definite, it needs to be indicated   |
 
 ## Examples ##
-[GRUS](grus_gx8002_examples/examples/ )
+[GRUS](grus/examples/mnist )
 
-[LEO](leo_gx8010_examples/examples/ )
+[LEO](leo/examples/mnist )
 
 ## FAQ ##
 
