@@ -81,18 +81,18 @@ Compile TF model file into NPU file that can run on NPU.
 | FUSE_BN             | true / false         | Fuse batch nomailization or not.                        |
 
 ##### LEO #####
-| ITEM                | Configuration        | Description                                             |
-| ------------------- | -------------------  | ------------------------------------------------------- |
-| CORENAME            | LEO                  | Chip name.                                              |
-| PB_FILE             |                      | TensorFlow Frozen PB.                                   |
-| OUTPUT_FILE         |                      | Output file name.                                       |
-| NPU_UNIT            | NPU32 / NPU64        | NPU device type. (NPU32 : SNPU, NPU64 : NPU)            |
-| COMPRESS            | true / false         | Weights compress or not.                                |
-| COMPRESS_QUANT_BITS | 4/5/6/7/8            | Quantization compression bits.                          |
-| COMPRESS_TYPE       | LINEAR/GAUSSIAN      | Linear more acuratable; Gaussian more compression rate  |
-| INPUT_OPS           | op_name: [shape] ... | Input OP name and shape.                                |
-| OUTPUT_OPS          | [out_op_names, ...]  | Output OP name.                                         |
-| INPUT_DATA          | op_name: [data] ...  | When input data is definite, it needs to be indicated   |
+| ITEM                | Configuration        | Description                                                 |
+| ------------------- | -------------------  | ----------------------------------------------------------- |
+| CORENAME            | LEO                  | Chip name.                                                  |
+| PB_FILE             |                      | TensorFlow Frozen PB.                                       |
+| OUTPUT_FILE         |                      | Output file name.                                           |
+| NPU_UNIT            | NPU32 / NPU64        | NPU device type. (NPU32 : SNPU, NPU64 : NPU)                |
+| COMPRESS            | true / false         | Weights compress or not.                                    |
+| COMPRESS_QUANT_BITS | 4/5/6/7/8            | Quantization compression bits.                              |
+| COMPRESS_TYPE       | LINEAR/GAUSSIAN      | Linear has more accurate; Gaussian has more compression rate|
+| INPUT_OPS           | op_name: [shape] ... | Input OP name and shape.                                    |
+| OUTPUT_OPS          | [out_op_names, ...]  | Output OP name.                                             |
+| INPUT_DATA          | op_name: [data] ...  | When input data is definite, it needs to be indicated       |
 
 ## Examples ##
 [GRUS](grus/examples/mnist )
